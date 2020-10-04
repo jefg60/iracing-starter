@@ -19,6 +19,7 @@ $TradingPaints = "C:\Program Files (x86)\Rhinode LLC\Trading Paints","Trading Pa
 $OBS_Studio = "C:\Program Files\obs-studio\bin\64bit","obs64"
 $GIMP2 = "C:\Program Files\GIMP 2\bin",$gimp2_exe[0].BaseName
 
+# Apps to start for each scenario
 $solorace_apps = $iRacing,$JoelRealTiming,$OBS_Studio,$CrewChief,$TradingPaints
 $teamrace_apps = $solorace_apps
 $paint_apps = $iRacing,$GIMP2
