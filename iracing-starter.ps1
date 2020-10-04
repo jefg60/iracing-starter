@@ -25,11 +25,6 @@ $teamrace_apps = $solorace_apps
 $paint_apps = $iRacing,$GIMP2
 $replay_apps = $solorace_apps
 
-if ( $solorace ) { $runlist = $solorace_apps }
-if ( $teamrace ) { $runlist = $teamrace_apps }
-if ( $paint ) { $runlist = $paint_apps }
-if ( $replay ) { $runlist = $replay_apps }
-
 function start-app {
     param (
         [Parameter(Mandatory=$true)]
@@ -38,6 +33,39 @@ function start-app {
         [string]$executable
     )
     Start-Process -WorkingDirectory $workingdir -FilePath "$workingdir\$executable.exe"
+}
+
+function stop-app {
+    param (
+        [Parameter(Mandatory=$true)]
+        [string]$appname
+    )
+    $app_process = Get-Process $appname -ErrorAction SilentlyContinue
+    if ( $app_process ) { Stop-Process -Name $appname }
+}
+
+if ( $solorace ) {
+    $runlist = $solorace_apps
+    $stoplist = ,$GIMP2 # comma to force an array of one sub-array
+}
+if ( $teamrace ) {
+    $runlist = $teamrace_apps
+    $stoplist = ,$GIMP2 # comma to force an array of one sub-array
+}
+if ( $replay ) {
+    $runlist = $replay_apps
+    $stoplist = ,$GIMP2 # comma to force an array of one sub-array
+}
+if ( $paint ) {
+    $runlist = $paint_apps
+    $stoplist = $TradingPaints,$JoelRealTiming,$OBS_Studio,$CrewChief
+}
+
+if ( $stoplist ) {
+    ForEach ($app in $stoplist ) {
+        Write-Host "Stopping" $app[1]
+        stop-app $app[1]
+    }
 }
 
 ForEach ($app in $runlist) {
