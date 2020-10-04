@@ -6,7 +6,9 @@
      [Parameter(ParameterSetName='paint')]
      [switch]$paint,
      [Parameter(ParameterSetName='replay')]
-     [switch]$replay
+     [switch]$replay,
+     [Parameter(ParameterSetName='stopeverything')]
+     [switch]$stopeverything
 )
 
 $gimp2_exe = get-childitem "C:\Program Files\GIMP 2\bin\gimp-2.*.exe"
@@ -24,6 +26,7 @@ $solorace_apps = $iRacing,$JoelRealTiming,$OBS_Studio,$CrewChief,$TradingPaints
 $teamrace_apps = $solorace_apps
 $paint_apps = $iRacing,$GIMP2
 $replay_apps = $solorace_apps
+$all_apps = $solorace_apps + $paint_apps
 
 function start-app {
     param (
@@ -60,6 +63,10 @@ if ( $paint ) {
     $runlist = $paint_apps
     $stoplist = $TradingPaints,$JoelRealTiming,$OBS_Studio,$CrewChief
 }
+if ($stopeverything ) {
+    $runlist = $false
+    $stoplist = $all_apps
+}
 
 if ( $stoplist ) {
     ForEach ($app in $stoplist ) {
@@ -68,11 +75,13 @@ if ( $stoplist ) {
     }
 }
 
-ForEach ($app in $runlist) {
-    Write-Host "Checking if" $app[1] "is running"
-    $alreadyrunning = Get-Process $app[1] -ErrorAction SilentlyContinue
-    if ( -Not $alreadyrunning ) {
-        Write-Host "Starting $app"
-        start-app -workingdir $app[0] -executable $app[1]
+if ( $runlist ) {
+    ForEach ($app in $runlist) {
+        Write-Host "Checking if" $app[1] "is running"
+        $alreadyrunning = Get-Process $app[1] -ErrorAction SilentlyContinue
+        if ( -Not $alreadyrunning ) {
+            Write-Host "Starting $app"
+            start-app -workingdir $app[0] -executable $app[1]
+        }
     }
 }
