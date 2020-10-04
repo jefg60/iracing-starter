@@ -19,7 +19,7 @@ $JoelRealTiming = "E:\Joel Real Timing - no CUDA","Timing"
 $CrewChief = "C:\Program Files (x86)\Britton IT Ltd\CrewChiefV4","CrewChiefV4"
 $TradingPaints = "C:\Program Files (x86)\Rhinode LLC\Trading Paints","Trading Paints"
 $OBS_Studio = "C:\Program Files\obs-studio\bin\64bit","obs64"
-$GIMP2 = "C:\Program Files\GIMP 2\bin",$gimp2_exe[0].BaseName
+$GIMP2 = $gimp2_exe.DirectoryName,$gimp2_exe[0].BaseName
 
 # Apps to start for each scenario
 $solorace_apps = $iRacing,$JoelRealTiming,$OBS_Studio,$CrewChief,$TradingPaints
