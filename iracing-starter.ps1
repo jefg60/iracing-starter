@@ -41,7 +41,7 @@ function start-app {
 }
 
 ForEach ($app in $runlist) {
-    Write-Host "Checking for $app"
+    Write-Host "Checking if" $app[1] "is running"
     $alreadyrunning = Get-Process $app[1] -ErrorAction SilentlyContinue
     if ( -Not $alreadyrunning ) {
         Write-Host "Starting $app"
