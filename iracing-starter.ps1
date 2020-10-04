@@ -1,7 +1,4 @@
-﻿[CmdletBinding(DefaultParametersetname="help")]
-Param (
-     [Parameter(ParameterSetName='help')]
-     [switch]$help = $true,
+﻿Param (
      [Parameter(ParameterSetName='solorace')]
      [switch]$solorace,
      [Parameter(ParameterSetName='teamrace')]
@@ -11,11 +8,6 @@ Param (
      [Parameter(ParameterSetName='replay')]
      [switch]$replay
 )
-
-if ( $help ) {
-    Write-Host Helping
-    Exit
-    }
 
 $gimp2_exe = get-childitem "C:\Program Files\GIMP 2\bin\gimp-2.*.exe"
 
@@ -28,7 +20,14 @@ $OBS_Studio = "C:\Program Files\obs-studio\bin\64bit","obs64"
 $GIMP2 = "C:\Program Files\GIMP 2\bin",$gimp2_exe[0].BaseName
 
 $solorace_apps = $iRacing,$JoelRealTiming,$OBS_Studio,$CrewChief,$TradingPaints
-$runlist = $solorace_apps
+$teamrace_apps = $solorace_apps
+$paint_apps = $iRacing,$GIMP2
+$replay_apps = $solorace_apps
+
+if ( $solorace ) { $runlist = $solorace_apps }
+if ( $teamrace ) { $runlist = $teamrace_apps }
+if ( $paint ) { $runlist = $paint_apps }
+if ( $replay ) { $runlist = $replay_apps }
 
 function start-app {
     param (
