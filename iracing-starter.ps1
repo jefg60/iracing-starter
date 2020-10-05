@@ -13,18 +13,19 @@
 
 $gimp2_exe = get-childitem "C:\Program Files\GIMP 2\bin\gimp-2.*.exe"
 
-# $App = directory,executable (without .exe)
-$iRacing = "C:\Program Files (x86)\iRacing\ui","iRacingUI"
-$JoelRealTiming = "E:\Joel Real Timing - no CUDA","Timing"
-$CrewChief = "C:\Program Files (x86)\Britton IT Ltd\CrewChiefV4","CrewChiefV4"
-$TradingPaints = "C:\Program Files (x86)\Rhinode LLC\Trading Paints","Trading Paints"
-$OBS_Studio = "C:\Program Files\obs-studio\bin\64bit","obs64"
-$GIMP2 = $gimp2_exe.DirectoryName,$gimp2_exe[0].BaseName
+# $App = directory,executable (without .exe), elevate ($true/$false)
+$iRacing = "C:\Program Files (x86)\iRacing\ui","iRacingUI",$false
+$JoelRealTiming = "E:\Joel Real Timing - no CUDA","Timing",$false
+$CrewChief = "C:\Program Files (x86)\Britton IT Ltd\CrewChiefV4","CrewChiefV4",$false
+$TradingPaints = "C:\Program Files (x86)\Rhinode LLC\Trading Paints","Trading Paints",$false
+$OBS_Studio = "C:\Program Files\obs-studio\bin\64bit","obs64",$false
+$GIMP2 = $gimp2_exe.DirectoryName,$gimp2_exe[0].BaseName,$false
+$Notepadplusplus = 'C:\Program Files\Notepad++','notepad++',$true
 
 # Apps to start for each scenario
 $solorace_apps = $iRacing,$JoelRealTiming,$OBS_Studio,$CrewChief,$TradingPaints
 $teamrace_apps = $solorace_apps
-$paint_apps = $iRacing,$GIMP2
+$paint_apps = $iRacing,$GIMP2,$Notepadplusplus
 $replay_apps = $solorace_apps
 $all_apps = $solorace_apps + $paint_apps
 
@@ -34,9 +35,15 @@ function start-app {
         [string]$workingdir,
         [Parameter(Mandatory=$true)]
         [string]$executable,
-        [string]$extension = 'exe'
+        [string]$extension = 'exe',
+        [bool]$elevate = $false
     )
-    Start-Process -WorkingDirectory $workingdir -FilePath "$workingdir\$executable.$extension"
+    if ( $elevate ) {
+        Write-Host WARNING: RUNNING $executable AS ADMIN
+        Start-Process -WorkingDirectory $workingdir -FilePath "$workingdir\$executable.$extension" -Verb RunAs
+    } else {
+        Start-Process -WorkingDirectory $workingdir -FilePath "$workingdir\$executable.$extension"
+    }
 }
 
 function stop-app {
@@ -82,7 +89,7 @@ if ( $runlist ) {
         $alreadyrunning = Get-Process $app[1] -ErrorAction SilentlyContinue
         if ( -Not $alreadyrunning ) {
             Write-Host "Starting $app"
-            start-app -workingdir $app[0] -executable $app[1]
+            start-app -workingdir $app[0] -executable $app[1] -elevate $app[2]
         }
     }
 }
