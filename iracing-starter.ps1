@@ -33,9 +33,10 @@ function start-app {
         [Parameter(Mandatory=$true)]
         [string]$workingdir,
         [Parameter(Mandatory=$true)]
-        [string]$executable
+        [string]$executable,
+        [string]$extension = 'exe'
     )
-    Start-Process -WorkingDirectory $workingdir -FilePath "$workingdir\$executable.exe"
+    Start-Process -WorkingDirectory $workingdir -FilePath "$workingdir\$executable.$extension"
 }
 
 function stop-app {
