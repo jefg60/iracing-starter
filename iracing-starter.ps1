@@ -64,7 +64,7 @@ if ( $paint ) {
     $runlist = $paint_apps
     $stoplist = $TradingPaints,$JoelRealTiming,$OBS_Studio,$CrewChief
 }
-if ($stopeverything ) {
+if ( $stopeverything ) {
     $runlist = $false
     $stoplist = $all_apps
 }
