@@ -25,7 +25,7 @@ $Notepadplusplus = 'C:\Program Files\Notepad++','notepad++',$true
 # Apps to start for each scenario
 $solorace_apps = $iRacing,$JoelRealTiming,$OBS_Studio,$CrewChief,$TradingPaints
 $teamrace_apps = $solorace_apps
-$paint_apps = $iRacing,$GIMP2,$Notepadplusplus
+$paint_apps = $iRacing,$GIMP2
 $replay_apps = $solorace_apps
 $all_apps = $solorace_apps + $paint_apps
 
